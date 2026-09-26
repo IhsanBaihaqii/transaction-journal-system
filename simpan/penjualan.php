@@ -1,5 +1,5 @@
 <?php
-require 'koneksi.php';
+require '../koneksi.php';
 
 // Form hanya boleh dikirim dengan metode POST.
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
@@ -21,7 +21,7 @@ $valid = $tanggalBenar && $tanggalBenar->format('Y-m-d') == $tanggal
     && (float)$jumlah <= 9999999999;
 
 if (!$valid) {
-    header('Location: index.php?pesan=gagal');
+    header('Location: ../index.php?pesan=gagal');
     exit;
 }
 
@@ -53,9 +53,9 @@ try {
     mysqli_stmt_execute($jurnal);
 
     mysqli_commit($koneksi);
-    header('Location: index.php?pesan=berhasil');
+    header('Location: ../index.php?pesan=berhasil');
 } catch (Exception $e) {
     mysqli_rollback($koneksi);
-    header('Location: index.php?pesan=gagal');
+    header('Location: ../index.php?pesan=gagal');
 }
 exit;
