@@ -3,7 +3,7 @@
 require 'config/koneksi.php';
 require 'includes/functions.php';
 
-$halamanAktif = 'penjualan';
+$halamanAktif = 'pembelian';
 
 $ringkasan = mysqli_fetch_assoc(
     mysqli_query(
@@ -12,7 +12,7 @@ $ringkasan = mysqli_fetch_assoc(
         SELECT
             COUNT(*) AS banyak,
             COALESCE(SUM(jumlah), 0) AS total
-        FROM penjualan
+        FROM pembelian
         '
     )
 );
@@ -21,7 +21,7 @@ $data = mysqli_query(
     $koneksi,
     '
     SELECT *
-    FROM penjualan
+    FROM pembelian
     ORDER BY id DESC
     '
 );
@@ -37,7 +37,7 @@ $data = mysqli_query(
         name="viewport"
         content="width=device-width, initial-scale=1">
     <title>
-        Penjualan | SIA Dasar
+        Pembelian | SIA Dasar
     </title>
     <link
         rel="stylesheet"
@@ -53,40 +53,39 @@ $data = mysqli_query(
                     PERTEMUAN 5 · OTOMATISASI
                 </small>
                 <h1>
-                    Penjualan Tunai
+                    Pembelian Tunai
                 </h1>
                 <p>
-                    Satu transaksi menghasilkan jurnal debit
-                    dan kredit secara otomatis.
+                    Catat pembelian dan buat jurnal otomatis.
                 </p>
             </div>
             <div class="heading-icon">
-                ↗
+                ↓
             </div>
         </header>
 
         <?php if (isset($_GET['pesan']) && $_GET['pesan'] === 'berhasil') { ?>
             <div class="alert success">
-                Penjualan berhasil disimpan dan jurnal otomatis telah dibuat.
+                Pembelian berhasil disimpan dan jurnal otomatis telah dibuat.
             </div>
         <?php } ?>
 
         <?php if (isset($_GET['pesan']) && $_GET['pesan'] === 'gagal') { ?>
             <div class="alert error">
-                Data belum tersimpan. Periksa kembali data yang dimasukkan.
+                Pembelian gagal disimpan. Periksa kembali data.
             </div>
         <?php } ?>
 
         <div class="stats">
             <div class="stat">
                 <span>
-                    Total Penjualan
+                    Total Pembelian
                 </span>
                 <strong>
                     <?php echo rupiah($ringkasan['total']); ?>
                 </strong>
                 <small>
-                    Seluruh transaksi tersimpan
+                    Seluruh transaksi pembelian
                 </small>
             </div>
             <div class="stat">
@@ -97,10 +96,9 @@ $data = mysqli_query(
                     <?php echo (int) $ringkasan['banyak']; ?>
                 </strong>
                 <small>
-                    Bukti penjualan tercatat
+                    Bukti pembelian tercatat
                 </small>
             </div>
-
             <div class="stat accent">
                 <span>
                     Aturan Jurnal
@@ -109,7 +107,7 @@ $data = mysqli_query(
                     Debit = Kredit
                 </strong>
                 <small>
-                    Kas dan Penjualan
+                    Pembelian dan Kas
                 </small>
             </div>
         </div>
@@ -117,14 +115,15 @@ $data = mysqli_query(
             <section class="card">
                 <div class="card-title">
                     <h2>
-                        Tambah Penjualan
+                        Tambah Pembelian
                     </h2>
                     <p>
-                        Masukkan transaksi penjualan tunai.
+                        Masukkan transaksi pembelian tunai.
                     </p>
                 </div>
+
                 <form
-                    action="simpan/penjualan.php"
+                    action="simpan/pembelian.php"
                     method="post"
                     onsubmit="this.querySelector('button').disabled=true">
                     <label>
@@ -136,12 +135,12 @@ $data = mysqli_query(
                             required>
                     </label>
                     <label>
-                        Nama Pelanggan
+                        Nama Pemasok
                         <input
                             type="text"
-                            name="pelanggan"
+                            name="pemasok"
                             maxlength="100"
-                            placeholder="Contoh: Andi"
+                            placeholder="Contoh: PT Maju Jaya"
                             required>
                     </label>
                     <label>
@@ -150,7 +149,7 @@ $data = mysqli_query(
                             type="text"
                             name="keterangan"
                             maxlength="200"
-                            placeholder="Contoh: Penjualan tunai"
+                            placeholder="Contoh: Pembelian barang tunai"
                             required>
                     </label>
                     <label>
@@ -161,7 +160,7 @@ $data = mysqli_query(
                             min="1"
                             max="9999999999"
                             step="1"
-                            placeholder="250000"
+                            placeholder="500000"
                             required>
                     </label>
                     <button type="submit">
@@ -171,34 +170,34 @@ $data = mysqli_query(
             </section>
             <section class="card lesson">
                 <div class="lesson-tag">
-                    JURNAL PENJUALAN
+                    JURNAL PEMBELIAN
                 </div>
                 <h2>
-                    Penjualan tunai
+                    Pembelian tunai
                 </h2>
                 <ol>
                     <li>
-                        Masukkan transaksi penjualan.
+                        Masukkan transaksi pembelian.
                     </li>
                     <li>
-                        Data masuk ke tabel penjualan.
+                        Data masuk ke tabel pembelian.
                     </li>
                     <li>
-                        Kas dicatat pada sisi debit.
+                        Pembelian dicatat pada sisi debit.
                     </li>
                     <li>
-                        Penjualan dicatat pada sisi kredit.
+                        Kas dicatat pada sisi kredit.
                     </li>
                 </ol>
                 <div class="example">
                     <b>
-                        Contoh Rp250.000
+                        Contoh Rp500.000
                     </b>
                     <span>
-                        Kas (Debit) Rp250.000
+                        Pembelian (Debit) Rp500.000
                     </span>
                     <span>
-                        Penjualan (Kredit) Rp250.000
+                        Kas (Kredit) Rp500.000
                     </span>
                 </div>
             </section>
@@ -207,10 +206,10 @@ $data = mysqli_query(
         <section class="card list-card">
             <div class="card-title">
                 <h2>
-                    Daftar Penjualan
+                    Daftar Pembelian
                 </h2>
                 <p>
-                    Seluruh transaksi penjualan tunai.
+                    Seluruh transaksi pembelian tunai.
                 </p>
             </div>
             <div class="table-scroll">
@@ -224,7 +223,7 @@ $data = mysqli_query(
                                 Tanggal
                             </th>
                             <th>
-                                Pelanggan
+                                Pemasok
                             </th>
                             <th>
                                 Keterangan
@@ -239,14 +238,14 @@ $data = mysqli_query(
                             <tr>
                                 <td>
                                     <b>
-                                        <?php echo nomorBukti('penjualan', $baris['id']); ?>
+                                        <?php echo nomorBukti('pembelian', $baris['id']); ?>
                                     </b>
                                 </td>
                                 <td>
                                     <?php echo aman($baris['tanggal']); ?>
                                 </td>
                                 <td>
-                                    <?php echo aman($baris['pelanggan']); ?>
+                                    <?php echo aman($baris['pemasok']); ?>
                                 </td>
                                 <td>
                                     <?php echo aman($baris['keterangan']); ?>
@@ -264,7 +263,7 @@ $data = mysqli_query(
                                 <td
                                     colspan="5"
                                     class="empty">
-                                    Belum ada transaksi penjualan.
+                                    Belum ada transaksi pembelian.
                                 </td>
                             </tr>
                         <?php } ?>
@@ -276,6 +275,7 @@ $data = mysqli_query(
         <footer>
             Praktikum Sistem Informasi Akuntansi · Semester 5
         </footer>
+
     </main>
 
 </body>
